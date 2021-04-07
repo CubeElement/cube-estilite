@@ -1,5 +1,6 @@
 exported/
 resources/
+.vscode/
 
 # Vagrant
 .vagrant/
