@@ -2,6 +2,9 @@
 import sys
 import os
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+
 from mainframe_gui import Ui_Form
 from model import Model
 
@@ -11,7 +14,7 @@ def display_start_fix():
 class MainWindow(QMainWindow, Ui_Form):
     def __init__(self, model=None):
         self.model = model
-        QMainWindow.__init__(self)
+        QMainWindow.__init__(self)        
         self.setupUi(self)        
         self.set_current_values()
         self.actives_set = set()
@@ -123,7 +126,6 @@ class MainWindow(QMainWindow, Ui_Form):
             return
 
     def materials_slot(self, material):
-        print(material)
         self.speed = self.material_data[material][0]
         self.update_status('ui_speed', self.speed)
         self.ui_speed.setText(str(self.speed))
@@ -135,6 +137,7 @@ class MainWindow(QMainWindow, Ui_Form):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # app.setWindowIcon(QtGui.QIcon(":/pictures/Main_icon_8x8.ico"))
     model = Model()
     mainWindow = MainWindow(model)
     mainWindow.show()

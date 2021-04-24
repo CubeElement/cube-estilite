@@ -15,10 +15,6 @@ class Model():
         revolutions = (float(cutting_speed)*1000)/(3.14*float(diameter))
         return ("{:.0f}".format(round(float(revolutions), 0)))
 
-    def revolutions_feed_formel(self, feedrate, znum, feedpertooth):
-        revolutions = (float(feedrate))/(float(feedpertooth)*float(znum))
-        return ("{:.0f}".format(round(float(revolutions), 0)))
-
     def feedrate_formel(self, speed, feedpertooth, znum):
         feedrate = float(speed)*float(feedpertooth)*float(znum)
         return ("{:.0f}".format(round(float(feedrate), 0)))
@@ -28,11 +24,11 @@ class Model():
         return ("{:.3f}".format(round(float(feedpertooth), 3)))
 
     def create_cuttingdata(self):
-        cutting_parameters = {"P":[80, 0.03],
+        standard_cutting_parameters = {"P":[80, 0.03],
                               "M":[50, 0.025],
                               "K":[100, 0.05],
                               "N":[250, 0.07],
                               "S":[70, 0.04],
                               "H":[35, 0.02]
         }
-        return cutting_parameters
+        return standard_cutting_parameters
