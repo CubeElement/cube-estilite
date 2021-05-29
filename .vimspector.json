@@ -1,0 +1,15 @@
+{
+  "configurations": {
+    "run legacy vscode-python": {
+      "adapter": "debugpy",
+      "configuration": {
+        "request": "launch",
+        "type": "python",
+        "cwd": "${workspaceRoot}",
+        "program": "${file}",
+        "stopOnEntry": true,
+        "console": "integratedTerminal"
+      }
+    }
+  }
+}

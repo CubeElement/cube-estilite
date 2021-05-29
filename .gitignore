@@ -2,6 +2,9 @@ exported/
 resources/
 .vscode/
 
+# vim temp files
+*.swp
+
 # Vagrant
 .vagrant/
 

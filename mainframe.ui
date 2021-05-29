@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
+    <width>500</width>
     <height>600</height>
    </rect>
   </property>
@@ -19,19 +19,19 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>450</width>
+    <width>500</width>
     <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>450</width>
+    <width>500</width>
     <height>600</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
-    <width>450</width>
+    <width>500</width>
     <height>600</height>
    </size>
   </property>
@@ -53,7 +53,7 @@
     <rect>
      <x>40</x>
      <y>40</y>
-     <width>362</width>
+     <width>444</width>
      <height>521</height>
     </rect>
    </property>
@@ -180,6 +180,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="d_units">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>mm</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -281,6 +294,19 @@
           </property>
           <property name="clearButtonEnabled">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="v_units">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>m/min</string>
           </property>
          </widget>
         </item>
@@ -388,6 +414,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="s_units">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>RPM</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -492,6 +531,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="z_untis">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>#</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -593,6 +645,19 @@
           </property>
           <property name="clearButtonEnabled">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="f_units">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>mm/min</string>
           </property>
          </widget>
         </item>
@@ -703,6 +768,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="fz_units">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>mm</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -741,6 +819,12 @@
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;P - Steels &lt;/span&gt;&lt;/p&gt;&lt;p&gt;Non-, high- and low-alloy steels&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 400 N/mm&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(53, 132, 228);</string>
+        </property>
         <property name="text">
          <string>P</string>
         </property>
@@ -764,6 +848,12 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;M - Stainless steel&lt;/span&gt;&lt;/p&gt;&lt;p&gt;alloys with Iron as major element and Chrome content higher than 12%&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 700 N/mm&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(229, 165, 10);</string>
         </property>
         <property name="text">
          <string>M</string>
@@ -789,6 +879,12 @@
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;K - Cast iron&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Cast irons are Fe-C composition with percentage of Silicon in between 1 and 3%.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 300 HB&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(192, 28, 40);</string>
+        </property>
         <property name="text">
          <string>K</string>
         </property>
@@ -812,6 +908,12 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;N - Non-ferrous materials&lt;/span&gt;&lt;/p&gt;&lt;p&gt;soft metals with hardnesses under 130 HB. Aluminum is the most common.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 100 HB&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(46, 194, 126);</string>
         </property>
         <property name="text">
          <string>N</string>
@@ -837,6 +939,12 @@
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;S - High Temp alloys&lt;/span&gt;&lt;/p&gt;&lt;p&gt;High TempAlloys (Nickel, iron or cobalt-based) and Titanium.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 1050 N/mm&lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(230, 97, 0);</string>
+        </property>
         <property name="text">
          <string>S</string>
         </property>
@@ -860,6 +968,12 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;H - Hardened materials&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hardened and thermal treated materials with hardness higher than 45HRc.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;up to 60 HRC&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(61, 56, 70);</string>
         </property>
         <property name="text">
          <string>H</string>

@@ -5,8 +5,6 @@ class Model():
     def __init__(self):
         self.datatable = self.create_cuttingdata()
 
-
-
     def speed_formel(self, revolutions, diameter):
         speed = (3.14*float(diameter)*float(revolutions))/1000
         return ("{:.0f}".format(round(float(speed), 0)))
