@@ -1,14 +1,13 @@
-# export DISPLAY=:0 - command for Qt Display Connection errors
 import sys
 import os
 from PyQt5.QtWidgets import QApplication, QMainWindow
-# from PyQt5 import QtGui
-# from PyQt5 import QtCore
 
 from mainframe_gui import Ui_Form
 from model import Model
 
+import re
 
+# export DISPLAY=:0 - command for Qt Display Connection
 def display_start_fix():
     os.environ['DISPLAY'] = ':0'
 
@@ -19,17 +18,17 @@ class MainWindow(QMainWindow, Ui_Form):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.set_current_values()
-        self.actives_set = set()
+        self.active_input = set()
         self.material_data = self.model.create_cuttingdata()
         self.connectSignals()
 
     def set_current_values(self):
         self.dia = self.ui_dia.text()  # Tool diameter, mm
-        self.rpm = self.ui_rev.text()  # Revolutions per minute, 1/min
+        self.rev = self.ui_rev.text()  # Revolutions per minute, 1/min
         self.speed = self.ui_speed.text()  # Cutting speed, m/min
         self.feedrate = self.ui_feedrate.text()  # Feedrate, mm/min
         self.feedpertooth = self.ui_feedpertooth.text()  # Feed per T, mm/tooth
-        self.znum = self.ui_z.text()  # Number of Teeth
+        self.z = self.ui_z.text()  # Number of Teeth
 
     def connectSignals(self):
         self.ui_dia.editingFinished.connect(self.diameter_slot)
@@ -46,98 +45,97 @@ class MainWindow(QMainWindow, Ui_Form):
         self.ui_mat_s.clicked.connect(lambda x: self.materials_slot("S"))
         self.ui_mat_h.clicked.connect(lambda x: self.materials_slot("H"))
 
-    def update_status(self, name=None, value=None):
-        if value != "" and name not in self.actives_set:
-            self.actives_set.add(str(name))
-        elif value == "" and name in self.actives_set:
-            self.actives_set.remove(name)
+    def activate(self, name: str=None):
+        if name not in self.active_input:
+            self.active_input.add(str(name))
+        else:
+            pass
+        
+    def deactivate(self, name: str=None):
+        if name in self.active_input:
+            self.active_input.remove(str(name))
+        else:
+            pass
+    
+    def is_valid_float(self, value):
+        float_regex = "([0-9]+([.][0-9]*)?|[.][0-9]+)$"
+        return re.match(float_regex, value)
 
-    def store_userinput(self):
-        self.name = self.sender().objectName()
-        self.value = self.sender().text()
-        self.update_status(self.name, self.value)
-        print(self.dia, self.rpm, self.speed,
-              self.feedrate, self.feedpertooth, self.znum)
+    def assign_value(self, lineobject, value:str=None):
+        name = lineobject.objectName()
+        if value is None:
+            value = lineobject.text()
+
+        if self.is_valid_float(value) and float(value)>0 and value!="":
+            lineobject.setText(value)
+            self.set_current_values()
+            self.activate(name)
+        else:
+            lineobject.setText("")
+            self.set_current_values()
+            self.deactivate(name)
+
+        print(self.dia, self.rev, self.speed,
+              self.feedrate, self.feedpertooth, self.z)
+        print(self.active_input)
 
     def diameter_slot(self):
-        self.dia = self.ui_dia.text()
-        self.store_userinput()
+        self.assign_value(self.ui_dia)
         self.rev_expr()
 
     def speed_slot(self):
-        self.speed = self.ui_speed.text()
-        self.store_userinput()
+        self.assign_value(self.ui_speed)
         self.rev_expr()
 
     def rev_slot(self):
-        self.rpm = self.ui_rev.text()
-        self.store_userinput()
+        self.assign_value(self.ui_rev)
         self.speed_expr()
 
     def z_slot(self):
-        self.znum = self.ui_z.text()
-        self.store_userinput()
+        self.assign_value(self.ui_z)
         self.feedrate_expr()
 
     def F_slot(self):
-        self.feedrate = self.ui_feedrate.text()
-        self.store_userinput()
+        self.assign_value(self.ui_feedrate)
         self.feedpertooth_expr()
         self.rev_expr()
 
     def f_slot(self):
-        self.feedpertooth = self.ui_feedpertooth.text()
-        self.store_userinput()
+        self.assign_value(self.ui_feedpertooth)
         self.feedrate_expr()
 
     def speed_expr(self):
-        if {"ui_dia", "ui_rev"}.issubset(self.actives_set):
-            speed_result = self.model.speed_formel(self.rpm, self.dia)
-            self.ui_speed.setText(str(speed_result))
-            self.speed = self.ui_speed.text()
-            self.update_status('ui_speed', speed_result)
+        if {"ui_dia", "ui_rev"}.issubset(self.active_input):
+            speed_result = self.model.speed_formula(self.rev,
+                                                   self.dia)
+            self.assign_value(self.ui_speed, speed_result)
             self.feedrate_expr()
 
     def rev_expr(self):
-        if {"ui_dia", "ui_speed"}.issubset(self.actives_set):
-            self.set_current_values()
-            rev_result = self.model.revolutions_formel(self.speed, self.dia)
-            self.ui_rev.setText(str(rev_result))
-            self.rpm = self.ui_rev.text()
-            self.update_status('ui_rev', rev_result)
+        if {"ui_dia", "ui_speed"}.issubset(self.active_input):
+            rev_result = self.model.revolutions_formula(self.speed, self.dia)
+            rev = self.assign_value(self.ui_rev, rev_result)
             self.feedrate_expr()
-        else:
-            return
 
     def feedrate_expr(self):
-        if {"ui_rev", "ui_z", "ui_feedpertooth"}.issubset(self.actives_set):
-            feedrate_result = self.model.feedrate_formel(self.rpm,
+        if {"ui_rev", "ui_z", "ui_feedpertooth"}.issubset(self.active_input):
+            feedrate_result = self.model.feedrate_formula(self.rev,
                                                          self.feedpertooth,
-                                                         self.znum)
-            self.ui_feedrate.setText(str(feedrate_result))
-            self.feedrate = self.ui_feedrate.text()
-            self.update_status('ui_feedrate', feedrate_result)
-        else:
-            return
+                                                         self.z)
+            self.assign_value(self.ui_feedrate, feedrate_result)
 
     def feedpertooth_expr(self):
-        if {"ui_rev", "ui_z", "ui_feedrate"}.issubset(self.actives_set):
-            feedpertooth_result = self.model.feedpertooth_formel(self.rpm,
+        if {"ui_rev", "ui_z", "ui_feedrate"}.issubset(self.active_input):
+            feedpertooth_result = self.model.feedpertooth_formula(self.rev,
                                                                  self.feedrate,
-                                                                 self.znum)
-            self.ui_feedpertooth.setText(str(feedpertooth_result))
-            self.feedpertooth = self.ui_feedpertooth.text()
-            self.update_status('ui_feedpertooth', feedpertooth_result)
-        else:
-            return
+                                                                 self.z)
+            self.assign_value(self.ui_feedpertooth, feedpertooth_result)
 
-    def materials_slot(self, material):
-        self.speed = self.material_data[material][0]
-        self.update_status('ui_speed', self.speed)
-        self.ui_speed.setText(str(self.speed))
-        self.feedpertooth = self.material_data[material][1]
-        self.update_status('ui_feedpertooth', self.feedpertooth)
-        self.ui_feedpertooth.setText(str(self.feedpertooth))
+    def materials_slot(self, material: str):
+        speed = str(self.material_data[material][0])
+        self.assign_value(self.ui_speed, speed)
+        feedpertooth = str(self.material_data[material][1])
+        self.assign_value(self.ui_feedpertooth, feedpertooth)
         self.rev_expr()
         self.feedrate_expr()
 
