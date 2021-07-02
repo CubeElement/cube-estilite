@@ -17,18 +17,10 @@ class MainWindow(QMainWindow, Ui_Form):
         self.model = model
         QMainWindow.__init__(self)
         self.setupUi(self)
-        self.set_current_values()
-        self.active_input = set()
+        self.actvalues = dict()
+        self.actdict = self.actvalues.keys()
         self.material_data = self.model.create_cuttingdata()
         self.connectSignals()
-
-    def set_current_values(self):
-        self.dia = self.ui_dia.text()  # Tool diameter, mm
-        self.rev = self.ui_rev.text()  # Revolutions per minute, 1/min
-        self.speed = self.ui_speed.text()  # Cutting speed, m/min
-        self.feedrate = self.ui_feedrate.text()  # Feedrate, mm/min
-        self.feedpertooth = self.ui_feedpertooth.text()  # Feed per T, mm/tooth
-        self.z = self.ui_z.text()  # Number of Teeth
 
     def connectSignals(self):
         self.ui_dia.editingFinished.connect(self.diameter_slot)
@@ -45,39 +37,37 @@ class MainWindow(QMainWindow, Ui_Form):
         self.ui_mat_s.clicked.connect(lambda x: self.materials_slot("S"))
         self.ui_mat_h.clicked.connect(lambda x: self.materials_slot("H"))
 
-    def activate(self, name: str=None):
-        if name not in self.active_input:
-            self.active_input.add(str(name))
-        else:
-            pass
+    def activate(self, name:str, value:str):
+        self.actvalues[name] = float(value)
+        print(f'actual values: {self.actvalues}')
+            
         
-    def deactivate(self, name: str=None):
-        if name in self.active_input:
-            self.active_input.remove(str(name))
+    def deactivate(self, name:str=None):
+        if name in self.actvalues.keys():
+            del self.actvalues[name]
+            print(f'actual values: {self.actvalues}')
         else:
             pass
     
-    def is_valid_float(self, value):
+    def is_valid_float(self, value=None) -> bool():
         float_regex = "([0-9]+([.][0-9]*)?|[.][0-9]+)$"
-        return re.match(float_regex, value)
+        is_float = re.match(float_regex, str(value))
+        if is_float is not None:
+            return True
+        return False
 
-    def assign_value(self, lineobject, value:str=None):
+    def assign_value(self, lineobject, value=None):
         name = lineobject.objectName()
         if value is None:
             value = lineobject.text()
 
         if self.is_valid_float(value) and float(value)>0 and value!="":
-            lineobject.setText(value)
-            self.set_current_values()
-            self.activate(name)
+            print(f'{name} is equal {value}')
+            lineobject.setText(str(value))
+            self.activate(name, value)
         else:
             lineobject.setText("")
-            self.set_current_values()
             self.deactivate(name)
-
-        print(self.dia, self.rev, self.speed,
-              self.feedrate, self.feedpertooth, self.z)
-        print(self.active_input)
 
     def diameter_slot(self):
         self.assign_value(self.ui_dia)
@@ -98,37 +88,39 @@ class MainWindow(QMainWindow, Ui_Form):
     def F_slot(self):
         self.assign_value(self.ui_feedrate)
         self.feedpertooth_expr()
-        self.rev_expr()
 
     def f_slot(self):
         self.assign_value(self.ui_feedpertooth)
         self.feedrate_expr()
 
     def speed_expr(self):
-        if {"ui_dia", "ui_rev"}.issubset(self.active_input):
-            speed_result = self.model.speed_formula(self.rev,
-                                                   self.dia)
+        if {"ui_dia", "ui_rev"}.issubset(self.actdict):
+            speed_result = self.model.speed_formula(
+                                                self.actvalues['ui_rev'],
+                                                self.actvalues['ui_dia'])
             self.assign_value(self.ui_speed, speed_result)
-            self.feedrate_expr()
 
     def rev_expr(self):
-        if {"ui_dia", "ui_speed"}.issubset(self.active_input):
-            rev_result = self.model.revolutions_formula(self.speed, self.dia)
-            rev = self.assign_value(self.ui_rev, rev_result)
-            self.feedrate_expr()
+        if {"ui_dia", "ui_speed"}.issubset(self.actdict):
+            rev_result = self.model.revolutions_formula(
+                                                self.actvalues['ui_speed'],
+                                                self.actvalues['ui_dia'])
+            self.assign_value(self.ui_rev, rev_result)
 
     def feedrate_expr(self):
-        if {"ui_rev", "ui_z", "ui_feedpertooth"}.issubset(self.active_input):
-            feedrate_result = self.model.feedrate_formula(self.rev,
-                                                         self.feedpertooth,
-                                                         self.z)
+        if {"ui_rev", "ui_z", "ui_feedpertooth"}.issubset(self.actdict):
+            feedrate_result = self.model.feedrate_formula(
+                                                self.actvalues['ui_rev'],
+                                                self.actvalues['ui_z'],
+                                                self.actvalues['ui_feedpertooth'])
             self.assign_value(self.ui_feedrate, feedrate_result)
 
     def feedpertooth_expr(self):
-        if {"ui_rev", "ui_z", "ui_feedrate"}.issubset(self.active_input):
-            feedpertooth_result = self.model.feedpertooth_formula(self.rev,
-                                                                 self.feedrate,
-                                                                 self.z)
+        if {"ui_rev", "ui_z", "ui_feedrate"}.issubset(self.actdict):
+            feedpertooth_result = self.model.feedpertooth_formula(
+                                                self.actvalues['ui_rev'],
+                                                self.actvalues['ui_z'],
+                                                self.actvalues['ui_feedrate'])
             self.assign_value(self.ui_feedpertooth, feedpertooth_result)
 
     def materials_slot(self, material: str):

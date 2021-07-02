@@ -1,22 +1,25 @@
+import math
+
+
 class Model():
     def __init__(self):
         self.datatable = self.create_cuttingdata()
 
     def speed_formula(self, revolutions, diameter):
-        speed = (3.14*float(diameter)*float(revolutions))/1000
-        return ("{:.0f}".format(round(float(speed), 0)))
+        speed = (math.pi * diameter * revolutions) / 1000
+        return round(speed, 100)
 
     def revolutions_formula(self, cutting_speed, diameter):
-        revolutions = (float(cutting_speed)*1000)/(3.14*float(diameter))
-        return ("{:.0f}".format(round(float(revolutions), 0)))
+        revolutions = (cutting_speed * 1000) / (math.pi * diameter)
+        return round(revolutions, 100)
 
-    def feedrate_formula(self, speed, feedpertooth, znum):
-        feedrate = float(speed)*float(feedpertooth)*float(znum)
-        return ("{:.0f}".format(round(float(feedrate), 0)))
+    def feedrate_formula(self, speed, znum, feedpertooth):
+        feedrate = speed * feedpertooth * znum
+        return round(feedrate, 100)
 
-    def feedpertooth_formula(self, speed, feedrate, znum):
-        feedpertooth = float(feedrate)/(float(speed)*float(znum))
-        return ("{:.3f}".format(round(float(feedpertooth), 3)))
+    def feedpertooth_formula(self, speed, znum, feedrate):
+        feedpertooth = feedrate / (speed * znum)
+        return round(feedpertooth, 100)
 
     def create_cuttingdata(self):
         standard_cutting_parameters = {"P": [80, 0.03],

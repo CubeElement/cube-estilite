@@ -18,3 +18,10 @@ $ cd cube-estilite
 # Run the app
 $ python3 mainframe.py
 ```
+To perform tests Pytest need to be installed:
+```bash
+# pytest conda package
+$ conda install -c conda-forge pytest
+# plugin for ui-testing
+$ conda install -c conda-forge pytest-qt
+```
