@@ -76,6 +76,7 @@ class MainWindow(QMainWindow, Ui_Form):
     def speed_slot(self):
         self.assign_value(self.ui_speed)
         self.rev_expr()
+        self.f_slot()
 
     def rev_slot(self):
         self.assign_value(self.ui_rev)
@@ -88,6 +89,7 @@ class MainWindow(QMainWindow, Ui_Form):
     def F_slot(self):
         self.assign_value(self.ui_feedrate)
         self.feedpertooth_expr()
+        self.rev_expr()
 
     def f_slot(self):
         self.assign_value(self.ui_feedpertooth)
