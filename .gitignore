@@ -1,6 +1,7 @@
 exported/
 resources/
 .vscode/
+cest_venv/
 
 # vim temp files
 *.swp

@@ -134,9 +134,3 @@ class TestModel:
     def test_formula_feedrate(self):
         res = app.model.feedpertooth_formula(speed=120, znum=10, feedrate=120)
         assert res == 0.1
-
-    def test_material_buttons(self, qtbot, app, mat_list):
-        for ui_item, letter in mat_list.items():
-            qtbot.mouseClick(ui_item, QtCore.Qt.LeftButton)
-            print(ui_item)
-            assert ui_item.text() == mat_list[ui_item]
